@@ -52,7 +52,8 @@ with open(data_file, "w") as f:
 api_url = f"https://api.github.com/repos/{repo}/discussions/{discussion_number}/comments"
 headers = {
     "Authorization": f"Bearer {token}",
-    "Accept":        "application/vnd.github+json"
+    "Accept":        "application/vnd.github+json",
+    "Content-Type":  "application/json"
 }
 payload = { "body": reply }
 
