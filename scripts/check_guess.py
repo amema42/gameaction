@@ -70,5 +70,5 @@ payload = {
 }
 
 response = requests.post(api_url, json=payload, headers=headers)
-print("Comment response:", response.status_code)
+print("Comment response:", response.status_code, response.text)
 print("Reply body:", reply)
