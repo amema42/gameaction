@@ -8,5 +8,10 @@
     "secret": 92,
     "attempts": 0,
     "solved": false
+  },
+  "8388481": {
+    "secret": 3,
+    "attempts": 0,
+    "solved": false
   }
 }
