@@ -45,29 +45,39 @@ with open(data_file, "w") as f:
     json.dump(data, f, indent=2)
 
 # Post comment reply using GraphQL
-api_url = "https://api.github.com/graphql"
+# api_url = "https://api.github.com/graphql"
+# headers = {
+#     "Authorization": f"Bearer {token}",
+#     "Accept": "application/vnd.github+json"
+# }
+# query = """
+# mutation($discussionId: ID!, $replyToId: ID!, $body: String!) {
+#   addDiscussionComment(input: {discussionId: $discussionId, replyToId: $replyToId, body: $body}) {
+#     comment {
+#       id
+#     }
+#   }
+# }
+# """
+# variables = {
+#     "discussionId": discussion_id,
+#     "replyToId": comment_id,
+#     "body": reply
+# }
+# payload = {
+#     "query": query,
+#     "variables": variables
+# }
+
+# response = requests.post(api_url, json=payload, headers=headers)
+# print("Comment response:", response.status_code, response.text)
+
+api_url = f"https://api.github.com/repos/{repo}/discussions/{discussion_id}/comments"
 headers = {
     "Authorization": f"Bearer {token}",
     "Accept": "application/vnd.github+json"
 }
-query = """
-mutation($discussionId: ID!, $replyToId: ID!, $body: String!) {
-  addDiscussionComment(input: {discussionId: $discussionId, replyToId: $replyToId, body: $body}) {
-    comment {
-      id
-    }
-  }
-}
-"""
-variables = {
-    "discussionId": discussion_id,
-    "replyToId": comment_id,
-    "body": reply
-}
-payload = {
-    "query": query,
-    "variables": variables
-}
+payload = { "body": reply }
 
 response = requests.post(api_url, json=payload, headers=headers)
 print("Comment response:", response.status_code, response.text)
