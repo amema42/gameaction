@@ -33,5 +33,10 @@
     "secret": 92,
     "attempts": 0,
     "solved": false
+  },
+  "11": {
+    "secret": 15,
+    "attempts": 0,
+    "solved": false
   }
 }
