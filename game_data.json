@@ -38,5 +38,10 @@
     "secret": 15,
     "attempts": 0,
     "solved": false
+  },
+  "12": {
+    "secret": 24,
+    "attempts": 0,
+    "solved": false
   }
 }
