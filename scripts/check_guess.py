@@ -56,6 +56,39 @@ headers = {
     "Content-Type": "application/json"
 }
 
+# First, get the discussion ID
+discussion_query = """
+query($owner: String!, $repo: String!, $number: Int!) {
+    repository(owner: $owner, name: $repo) {
+        discussion(number: $number) {
+            id
+        }
+    }
+}
+"""
+
+# Extract owner and repo name from GITHUB_REPOSITORY
+owner, repo_name = repo.split('/')
+
+# Query for discussion ID
+discussion_payload = {
+    "query": discussion_query,
+    "variables": {
+        "owner": owner,
+        "repo": repo_name,
+        "number": int(discussion_number)
+    }
+}
+
+discussion_response = requests.post(api_url, json=discussion_payload, headers=headers)
+discussion_data = discussion_response.json()
+
+if "errors" in discussion_data:
+    print("Error getting discussion ID:", discussion_data["errors"])
+    exit(1)
+
+discussion_id = discussion_data["data"]["repository"]["discussion"]["id"]
+
 # GraphQL mutation for creating a discussion comment
 mutation = """
 mutation($discussionId: ID!, $body: String!) {
@@ -66,9 +99,6 @@ mutation($discussionId: ID!, $body: String!) {
     }
 }
 """
-
-# Convert discussion number to ID format
-discussion_id = f"DISCUSSION_{discussion_number}"
 
 payload = {
     "query": mutation,
