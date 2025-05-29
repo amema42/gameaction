@@ -1,0 +1,27 @@
+name: Respond to Guesses
+
+on:
+  discussion_comment:
+    types: [created]
+
+jobs:
+  check-guess:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Check guess and respond
+        run: python scripts/check_guess.py
+        env:
+          DISCUSSION_ID: ${{ github.event.discussion.id }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
