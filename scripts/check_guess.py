@@ -2,7 +2,7 @@ import os
 import json
 import requests
 
-discussion_id = str(os.getenv("DISCUSSION_ID"))
+discussion_id = os.getenv("DISCUSSION_ID")
 comment_body = os.getenv("COMMENT_BODY", "").strip()
 comment_id = os.getenv("COMMENT_ID")
 author = os.getenv("COMMENT_AUTHOR")
@@ -44,15 +44,29 @@ else:
 with open(data_file, "w") as f:
     json.dump(data, f, indent=2)
 
-# Post comment reply
-api_url = f"https://api.github.com/repos/{repo}/discussions/{discussion_id}/comments"
+# Post comment reply using GraphQL
+api_url = "https://api.github.com/graphql"
 headers = {
     "Authorization": f"Bearer {token}",
     "Accept": "application/vnd.github+json"
 }
+query = """
+mutation($discussionId: ID!, $replyToId: ID!, $body: String!) {
+  addDiscussionComment(input: {discussionId: $discussionId, replyToId: $replyToId, body: $body}) {
+    comment {
+      id
+    }
+  }
+}
+"""
+variables = {
+    "discussionId": discussion_id,
+    "replyToId": comment_id,
+    "body": reply
+}
 payload = {
-    "body": reply,
-    "in_reply_to_id": comment_id
+    "query": query,
+    "variables": variables
 }
 
 response = requests.post(api_url, json=payload, headers=headers)
