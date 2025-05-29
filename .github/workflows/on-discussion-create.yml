@@ -7,7 +7,6 @@ on:
 jobs:
   generate-secret:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -20,12 +19,12 @@ jobs:
       - name: Run Python script to save number
         run: python scripts/save_secret_number.py
         env:
-          DISCUSSION_ID: ${{ github.event.discussion.id }}
+          DISCUSSION_NUMBER: ${{ github.event.discussion.number }}
 
       - name: Commit updated game_data.json
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add game_data.json
-          git commit -m "Generated secret number for discussion ${{ github.event.discussion.id }}" || echo "No changes to commit"
+          git commit -m "Generated secret number for discussion #${{ github.event.discussion.number }}" || echo "No changes to commit"
           git push
