@@ -48,14 +48,35 @@ else:
 with open(data_file, "w") as f:
     json.dump(data, f, indent=2)
 
-# POST reply via REST API
-api_url = f"https://api.github.com/repos/{repo}/discussions/{discussion_number}/comments"
+# POST reply via GraphQL API
+api_url = "https://api.github.com/graphql"
 headers = {
     "Authorization": f"Bearer {token}",
-    "Accept":        "application/vnd.github+json",
-    "Content-Type":  "application/json"
+    "Accept": "application/vnd.github+json",
+    "Content-Type": "application/json"
 }
-payload = { "body": reply }
+
+# GraphQL mutation for creating a discussion comment
+mutation = """
+mutation($discussionId: ID!, $body: String!) {
+    addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
+        comment {
+            id
+        }
+    }
+}
+"""
+
+# Convert discussion number to ID format
+discussion_id = f"DISCUSSION_{discussion_number}"
+
+payload = {
+    "query": mutation,
+    "variables": {
+        "discussionId": discussion_id,
+        "body": reply
+    }
+}
 
 response = requests.post(api_url, json=payload, headers=headers)
 print("Comment response:", response.status_code, response.text)
