@@ -23,5 +23,10 @@
     "secret": 27,
     "attempts": 0,
     "solved": false
+  },
+  "8388836": {
+    "secret": 1,
+    "attempts": 0,
+    "solved": false
   }
 }
