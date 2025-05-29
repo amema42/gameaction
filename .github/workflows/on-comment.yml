@@ -7,6 +7,7 @@ on:
 jobs:
   check-guess:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -22,8 +23,8 @@ jobs:
       - name: Run script to check guess
         run: python scripts/check_guess.py
         env:
-          DISCUSSION_ID: ${{ github.event.discussion.id }}
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          COMMENT_ID: ${{ github.event.comment.id }}
-          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCUSSION_NUMBER:   ${{ github.event.discussion.number }}
+          COMMENT_BODY:        ${{ github.event.comment.body }}
+          COMMENT_AUTHOR:      ${{ github.event.comment.user.login }}
+          GITHUB_TOKEN:        ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY:   ${{ github.repository }}
